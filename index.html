@@ -71,4 +71,19 @@ function draw(){
     }
     requestAnimationFrame(draw);
 } draw();
-</script></body></html>
+</script><script>
+    async function syncWithOverlord() {
+        const url = 'https://api.github.com/repos/1tmani/synaptic-overlord/contents/network_state.json';
+        try {
+            const resp = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3.raw' } });
+            const state = await resp.json();
+            if(state.energy_level === 'HIGH') {
+                document.documentElement.style.setProperty('--speed', '0.5s');
+            }
+            if(state.global_hue) {
+                document.documentElement.style.setProperty('--p', `hsl(${state.global_hue}, 100%, 50%)`);
+            }
+        } catch(e) { console.log('📡 Syncing...'); }
+    }
+    setInterval(syncWithOverlord, 5000); syncWithOverlord();
+    </script></body></html>
